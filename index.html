@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delvie — AI Executive Assistant</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f293d;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent: #10b981;
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.6; padding: 0 1rem; }
+    .container { max-width: 900px; margin: 0 auto; padding: 3rem 0; }
+    
+    /* 1. Hero Section */
+    .hero { text-align: center; margin-bottom: 4rem; }
+    .badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; padding: 6px 14px; border-radius: 9999px; font-size: 0.85rem; font-weight: 500; margin-bottom: 1.5rem; }
+    .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 8px var(--accent); }
+    .avatar { width: 88px; height: 88px; border-radius: 24px; background: linear-gradient(135deg, #1e3a8a, #3b82f6); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto 1.5rem; border: 2px solid #60a5fa; }
+    h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+    .tagline { color: var(--muted); font-size: 1.15rem; max-width: 600px; margin: 0 auto; }
+
+    /* 2. Problem & Solution */
+    .section-title { font-size: 1.5rem; font-weight: 600; text-align: center; margin-bottom: 1.5rem; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.75rem; }
+    .card-chaos { border-top: 4px solid var(--danger); }
+    .card-sol { border-top: 4px solid var(--accent); }
+    .card h3 { font-size: 1.1rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    ul { list-style: none; }
+    li { position: relative; padding-left: 1.5rem; margin-bottom: 0.75rem; font-size: 0.95rem; color: #d1d5db; }
+    .card-chaos li::before { content: "✕"; position: absolute; left: 0; color: var(--danger); font-weight: bold; }
+    .card-sol li::before { content: "✓"; position: absolute; left: 0; color: var(--accent); font-weight: bold; }
+
+    /* 3. Core Capabilities */
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 4rem; }
+    .feature-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.5rem; transition: transform 0.2s; }
+    .feature-card:hover { transform: translateY(-4px); }
+    .feature-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .feature-card h4 { margin-bottom: 0.5rem; font-size: 1.05rem; }
+    .feature-card p { font-size: 0.85rem; color: var(--muted); }
+
+    /* 4. Interactive Simulation */
+    .sim-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.5rem; margin-bottom: 4rem; }
+    .sim-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
+    .btn-scenario { background: #1e293b; border: 1px solid #334155; color: #e2e8f0; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+    .btn-scenario:hover { background: #334155; border-color: var(--primary); }
+    .chat-window { background: #0b1120; border: 1px solid #1e293b; border-radius: 12px; padding: 1rem; min-height: 180px; display: flex; flex-direction: column; gap: 0.75rem; }
+    .msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 0.9rem; line-height: 1.4; }
+    .msg.user { align-self: flex-end; background: var(--primary); color: white; border-bottom-right-radius: 2px; }
+    .msg.bot { align-self: flex-start; background: #1f2937; color: var(--text); border-bottom-left-radius: 2px; border: 1px solid #374151; }
+    .typing { align-self: flex-start; font-style: italic; color: var(--muted); font-size: 0.85rem; display: none; }
+
+    /* 5. Footer & CTA */
+    .cta-box { text-align: center; padding: 2rem 0; }
+    .btn-cta { display: inline-block; background: var(--primary); color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-weight: 600; font-size: 1rem; transition: background 0.2s; box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4); }
+    .btn-cta:hover { background: var(--primary-hover); }
+    footer { text-align: center; margin-top: 3rem; font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--card-border); padding-top: 1.5rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 1. Hero Section -->
+    <header class="hero">
+      <div class="badge"><span class="dot"></span>Status: Active & Ready 24/7</div>
+      <div class="avatar">⚡</div>
+      <h1>Delvie</h1>
+      <p class="tagline">Karyawan Digital operasional pribadi untuk orkestrasi jadwal bebas tabrakan dan manajemen dokumen terstruktur otomatis.</p>
+    </header>
+
+    <!-- 2. Problem & Solution -->
+    <section>
+      <h2 class="section-title">The Operational Shift</h2>
+      <div class="grid-2">
+        <div class="card card-chaos">
+          <h3>The Chaos</h3>
+          <ul>
+            <li>Sering lupa menyusun agenda sehingga banyak jadwal bertabrakan.</li>
+            <li>Dokumen digital tersimpan acak dan sulit ditemukan saat dibutuhkan.</li>
+            <li>Beban mental mengelola sinkronisasi jadwal kerja mandiri setiap pekan.</li>
+          </ul>
+        </div>
+        <div class="card card-sol">
+          <h3>The Solution (Delvie)</h3>
+          <ul>
+            <li>Sinkronisasi agenda harian/mingguan otomatis ke Google Calendar.</li>
+            <li>Pengarsipan rapi otomatis ke Google Drive & Notion sesuai format.</li>
+            <li>Validasi Human-in-the-Loop via WhatsApp/Telegram sebelum aksi kritis.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Core Capabilities -->
+    <section>
+      <h2 class="section-title">Core Capabilities & Stack</h2>
+      <div class="grid-3">
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h4>Smart Scheduling</h4>
+          <p>Menganalisis pesan audio/teks, menyusun kalender 1 pekan ke depan, dan mencegah tabrakan agenda secara real-time.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📁</div>
+          <h4>Doc Management</h4>
+          <p>Mengklasifikasi berkas kerja otomatis ke folder Google Drive & database Notion dengan metadata terorganisir.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h4>Omnichannel & HITL</h4>
+          <p>Terhubung langsung melalui Telegram, WhatsApp, & Discord dengan protokol verifikasi Human-in-the-Loop.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Simulation -->
+    <section class="sim-box">
+      <h2 class="section-title" style="margin-bottom: 0.5rem;">Coba Simulasi Respon Delvie</h2>
+      <p style="text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 1.25rem;">Klik tombol skenario untuk menguji aksi otonom Delvie:</p>
+      <div class="sim-actions">
+        <button class="btn-scenario" onclick="runScenario(1)">🗓️ Susun Jadwal Minggu Depan</button>
+        <button class="btn-scenario" onclick="runScenario(2)">📂 Rapikan Dokumen Kontrak</button>
+        <button class="btn-scenario" onclick="runScenario(3)">⚠️ Cek Jadwal Bentrok</button>
+      </div>
+      <div class="chat-window" id="chatWindow">
+        <div class="msg bot">Halo! Saya Delvie. Pilih salah satu skenario aksi di atas untuk melihat alur kerja saya.</div>
+      </div>
+      <div class="typing" id="typing">Delvie sedang memproses data...</div>
+    </section>
+
+    <!-- 5. Footer & CTA -->
+    <section class="cta-box">
+      <a href="https://wa.me/6282369015344" target="_blank" class="btn-cta">Hubungi Delvie via WhatsApp</a>
+    </section>
+
+    <footer>
+      Built with AI · AI Builder Bootcamp Showcase
+    </footer>
+  </div>
+
+  <script>
+    const chatWindow = document.getElementById("chatWindow");
+    const typingIndicator = document.getElementById("typing");
+    let isProcessing = false;
+
+    const scenarios = {
+      1: {
+        user: "Delvie, ini daftar kegiatan saya buat 1 minggu ke depan. Tolong jadwalkan.",
+        bot: "Siap! Seluruh 7 agenda telah dipetakan ke Google Calendar tanpa ada waktu bentrok. Ringkasan & tautan kalender sudah dikirim ke Telegram Anda."
+      },
+      2: {
+        user: "Tolong arsipkan dokumen revisi proposal dan kontrak vendor ini.",
+        bot: "Dokumen telah diklasifikasi ke folder 'Google Drive/2026/Proyek' dan basis data Notion telah diperbarui. Tautan arsip siap diakses!"
+      },
+      3: {
+        user: "Besok jam 14.00 ada meeting dadakan, apakah aman?",
+        bot: "[Human-in-the-Loop] Terdeteksi bentrok dengan sesi review internal. Ingin saya ajukan penyesuaian jadwal atau konfirmasi geser sesi?"
+      }
+    };
+
+    function runScenario(id) {
+      if (isProcessing) return;
+      isProcessing = true;
+
+      const data = scenarios[id];
+      chatWindow.innerHTML = `<div class="msg user">${data.user}</div>`;
+      typingIndicator.style.display = "block";
+
+      setTimeout(() => {
+        typingIndicator.style.display = "none";
+        const botMsg = document.createElement("div");
+        botMsg.className = "msg bot";
+        botMsg.innerText = data.bot;
+        chatWindow.appendChild(botMsg);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+        isProcessing = false;
+      }, 700);
+    }
+  </script>
+</body>
+</html>
